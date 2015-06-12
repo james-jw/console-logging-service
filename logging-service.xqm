@@ -26,7 +26,8 @@ declare
   %rest:path('/logging/trace')
   %rest:consumes("application/json")
   function trace:post($data as item()) {
-    let $path := (request:parameter('$property'), 'renderedMessage')[1]
-    fn:trace($data//*[name() = $path]/text())
+    let $path := request:parameter('$property') return
+      if($path) then fn:trace($data//*[name() = $path]/text())
+      else fn:trace(json:serialize($data))
 };
   
